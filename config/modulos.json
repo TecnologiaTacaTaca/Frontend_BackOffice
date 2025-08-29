@@ -1,0 +1,23 @@
+{
+    "reportes": {
+        "nombre_mostrado": "Reportes",
+        "descripcion": "Módulo para gestionar reportes.",
+        "ruta": "/reportes",
+        "submodulos": [
+            {   
+                "nombre": "reporte_transacciones",
+                "ruta": "/reportes/transacciones",
+                "nombre_mostrado_front": "Transacciones",
+                "descripcion": "Permite ver y descargar el reporte de transacciones.",
+                "metodos_contenidos": ["ver_reporte_transacciones", "descargar_reporte_transacciones"]
+            },
+            {   
+                "nombre": "reporte_movimientos",
+                "ruta": "/reportes/movimientos",
+                "nombre_mostrado_front": "Movimientos",
+                "descripcion": "Permite ver y descargar el reporte de movimientos.",
+                "metodos_contenidos": ["ver_reporte_movimientos", "descargar_reporte_movimientos"]
+            }
+        ]
+    }
+}
