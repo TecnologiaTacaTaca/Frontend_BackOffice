@@ -1,10 +1,5 @@
 #Importación del framework
 from nicegui import ui, App
-from dotenv import load_dotenv
-import os
-
-# Cargar variables de entorno desde archivo config.env
-load_dotenv('config.env')
 
 # ------------------------------------------------------------------------------
 # Importación de las páginas con sus rutas para la aplicación

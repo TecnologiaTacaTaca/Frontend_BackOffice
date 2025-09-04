@@ -1,11 +1,10 @@
-# Documentación Técnica Exhaustiva y Detallada del Proyecto Back Office
 
+# Documentación Técnica Exhaustiva y Detallada del Proyecto Back Office
+---
+**Fecha:** 27 de agosto de 2025
 ---
 
-## **Fecha:** 04 de septiembre de 2025
-
 ## Índice
-
 1. [Introducción](#1-introducción)
 2. [Arquitectura General](#2-arquitectura-general)
 3. [Estructura de Carpetas y Archivos](#3-estructura-base-de-carpetas-y-archivos)
@@ -17,7 +16,6 @@
 9. [Logging](#9-logging)
 10. [Escalabilidad de Módulos](#10-escalabilidad-de-módulos)
 11. [DevOps](#11-devops)
-12. [Modo de Desarrollo Local](#12-modo-de-desarrollo-local)
 
 ---
 
@@ -28,6 +26,7 @@ Back Office es una aplicación web en Python (NiceGUI) para gestión interna y r
 ### Decisión sobre nomenclatura e idioma
 
 Se ha definido que toda la nomenclatura del código (clases, funciones, variables, rutas, carpetas, archivos, loggeos y comentarios) se mantendrá en idioma español. El propósito principal de esta decisión es garantizar la trazabilidad y detección de autoría del código, y poder diferenciarlo del Framework y demás dependencias.
+
 
 ## 2. Arquitectura General
 
@@ -44,6 +43,7 @@ El proyecto Back Office está construido bajo una arquitectura modular, desacopl
 - **Estilos y recursos estáticos centralizados**: Los estilos (colores, fuentes) y los recursos estáticos (imágenes, fuentes tipográficas) se encuentran en carpetas dedicadas, permitiendo una personalización visual sencilla y coherente.
 
 - **Persistencia de sesión y estado**: Se utiliza el almacenamiento de sesión/tab de NiceGUI para mantener el usuario autenticado y sus datos relevantes durante la navegación, mejorando la experiencia de usuario y la seguridad.
+
 
 #### Flujo de autenticación y autorización
 
@@ -70,6 +70,7 @@ flowchart TD
 
     I --> J["Pantalla con módulos y rutas autorizadas"]
 ```
+
 
 ## 3. Estructura base de Carpetas y Archivos
 
@@ -100,6 +101,7 @@ usuario_sesion/                # Lógica de usuario y sesión.
    manejador_usuario.py         # Funciones para construir y validar usuario en sesión.
 ```
 
+
 ## 4. Gestión de Autenticación y Usuario
 
 La seguridad y la personalización de la experiencia de usuario en el Back Office se basan en una integración profunda con Azure Web Services con Easy Auth y Azure Active Directory (a través del uso de Microsoft Graph API). A continuación se detalla el flujo completo, los headers utilizados, la construcción y ciclo de vida de la clase Usuario, y la persistencia de la sesión.
@@ -113,6 +115,7 @@ La autenticación se basa en los headers HTTP inyectados automáticamente por Az
 
 Estos headers permiten identificar de forma segura al usuario y sus permisos, sin exponer credenciales ni lógica sensible en el frontend.
 
+
 ### Construcción y ciclo de vida de la clase Usuario
 
 La clase `Usuario` (ubicada en `usuario_sesion/usuario.py`) es el núcleo de la gestión de identidad y permisos. Su ciclo de vida es el siguiente:
@@ -124,8 +127,8 @@ La clase `Usuario` (ubicada en `usuario_sesion/usuario.py`) es el núcleo de la 
 5. **Persistencia**: El objeto Usuario se almacena en la sesión/tab del cliente usando el storage de NiceGUI.
 6. **Validación continua**: En cada request, se valida si el usuario de sesión coincide con el de los headers actuales. Si no coincide, se reconstruye el usuario.
 
-#### Métodos clave de la clase Usuario:
 
+#### Métodos clave de la clase Usuario:
 - `obtener_token_graph()`: Obtiene token de acceso para Graph API.
 - `extraer_principal_cliente()`: Decodifica y extrae claims del header.
 - `obtener_id_usuario_azure()`: Extrae el objectidentifier.
@@ -138,20 +141,18 @@ La clase `Usuario` (ubicada en `usuario_sesion/usuario.py`) es el núcleo de la 
 #### Persistencia y validación de sesión
 
 El usuario se almacena en el storage/tab de NiceGUI:
-
 ```python
 almacenamiento = app.storage.tab
 almacenamiento['usuario'] = Usuario(headers)
 ```
-
 Para validar si el usuario de sesión es el mismo que el de los headers:
-
 ```python
 usuario_actual: Usuario = almacenamiento['usuario']
 email_actual = usuario_actual.email
 email_headers = headers.get("x-ms-client-principal-name", "").lower()
 return email_actual == email_headers
 ```
+
 
 ## 5. Rutas y Navegación
 
@@ -173,150 +174,132 @@ El sistema de rutas y navegación en el Back Office está diseñado para ser fle
 
 - Desde cualquier función o página, se puede navegar a otra ruta utilizando `ui.navigate.to('/ruta')`.
 - Ejemplo:
-  ```python
-  ui.navigate.to('/nuevo/resumen')
-  ```
+   ```python
+   ui.navigate.to('/nuevo/resumen')
+   ```
 
 ### Resumen
 
 El sistema de rutas y navegación está completamente desacoplado de la lógica de permisos, permitiendo que la UI se adapte automáticamente a cada usuario y facilitando la extensión del sistema con nuevas páginas y módulos.
+
 
 ## 6. Estilos y Personalización
 
 La personalización visual del Back Office es flexible y centralizada, permitiendo adaptar la identidad visual de la aplicación a los lineamientos de cada organización.
 
 ### Colores y dark mode
-
 - Los colores principales, secundarios y de acento se definen en `estilos/colores.py` usando la función `ui.colors()` de NiceGUI.
 - El dark mode es soportado de forma nativa y puede ser activado/desactivado por el usuario desde el pie de página.
 - Ejemplo de definición de colores:
-  ```python
-  ui.colors(
-        primary='#FFFFFF',
-        secondary='#252525',
-        dark='#252525',
-        dark_page="#252525",
-        verdeoscuro='#005F5A',
-        verdeclaro='#35B6B4',
-        blanco='#FFFFFF',
-        grisoscuro="#252525",
-        rojo='#F44336'
-  )
-  ```
+   ```python
+   ui.colors(
+         primary='#FFFFFF',
+         secondary='#252525',
+         dark='#252525',
+         dark_page="#252525",
+         verdeoscuro='#005F5A',
+         verdeclaro='#35B6B4',
+         blanco='#FFFFFF',
+         grisoscuro="#252525",
+         rojo='#F44336'
+   )
+   ```
 
 ### Fuentes personalizadas
-
 - Las fuentes se definen y cargan en `estilos/fuentes.py`.
 - Se utiliza la fuente "Platform" (archivos woff2 en `static/fonts/`), aplicada globalmente mediante CSS inyectado en el head del documento.
 - Ejemplo de carga de fuente personalizada:
-  ```python
-  ui.add_head_html("""
-  <style>
-  @font-face {
-        font-family: 'Platform';
-        src: url('/static/fonts/Platform-Regular.woff2') format('woff2');
-        font-weight: normal;
-        font-style: normal;
-  }
-  body {
-        font-family: 'Platform', sans-serif !important;
-  }
-  </style>
-  """)
-  ```
+   ```python
+   ui.add_head_html("""
+   <style>
+   @font-face {
+         font-family: 'Platform';
+         src: url('/static/fonts/Platform-Regular.woff2') format('woff2');
+         font-weight: normal;
+         font-style: normal;
+   }
+   body {
+         font-family: 'Platform', sans-serif !important;
+   }
+   </style>
+   """)
+   ```
 
 ### Imágenes y recursos estáticos
-
 - Todas las imágenes, logos y favicon se encuentran en `static/img/`.
 - Las fuentes personalizadas se ubican en `static/fonts/`.
 - Es recomendable centralizar todos los recursos estáticos para facilitar el despliegue y la personalización.
 
 ### Recomendaciones
-
 - Mantén la paleta de colores y las fuentes alineadas con la identidad visual de la organización.
 - Si se agregan nuevos módulos con recursos propios, crea subcarpetas dentro de `static/` para mantener el orden.
 
 Esta estructura permite que la aplicación sea visualmente coherente, moderna y fácilmente adaptable a diferentes marcas o necesidades.
+
 
 ## 7. Configuración y Permisos
 
 La gestión de permisos y la estructura funcional de la aplicación se definen externamente mediante archivos JSON en la carpeta `config/`. Esto permite modificar la navegación, los accesos y los métodos disponibles sin necesidad de modificar el código fuente.
 
 ### config/modulos.json
-
 - Define la estructura de módulos, submódulos, rutas y métodos permitidos.
 - Cada módulo tiene un nombre mostrado, descripción, ruta base y una lista de submódulos.
 - Cada submódulo define su nombre, ruta, nombre mostrado en el frontend, descripción y los métodos que lo componen.
 
 #### Ejemplo:
-
 ```json
 {
-  "reportes": {
-    "nombre_mostrado": "Reportes",
-    "descripcion": "Módulo para gestionar reportes.",
-    "ruta": "/reportes",
-    "submodulos": [
-      {
-        "nombre": "reporte_transacciones",
-        "ruta": "/reportes/transacciones",
-        "nombre_mostrado_front": "Transacciones",
-        "descripcion": "Permite ver y descargar el reporte de transacciones.",
-        "metodos_contenidos": [
-          "ver_reporte_transacciones",
-          "descargar_reporte_transacciones"
-        ]
-      }
-    ]
-  }
+   "reportes": {
+      "nombre_mostrado": "Reportes",
+      "descripcion": "Módulo para gestionar reportes.",
+      "ruta": "/reportes",
+      "submodulos": [
+         {
+            "nombre": "reporte_transacciones",
+            "ruta": "/reportes/transacciones",
+            "nombre_mostrado_front": "Transacciones",
+            "descripcion": "Permite ver y descargar el reporte de transacciones.",
+            "metodos_contenidos": ["ver_reporte_transacciones", "descargar_reporte_transacciones"]
+         }
+      ]
+   }
 }
 ```
 
 ### config/metodos.json
-
 - Define los métodos disponibles, su descripción, parámetros y los grupos de acceso requeridos.
 - Cada método especifica el nombre, descripción, método HTTP, URL, parámetros y los grupos de área y nivel que pueden acceder.
 
 #### Ejemplo:
-
 ```json
 {
-  "ver_reporte_transacciones": {
-    "nombre": "ver_reporte_transacciones",
-    "descripcion": "Permite ver el reporte de transacciones.",
-    "metodo": "GET",
-    "url_dirigida": "/reportes/transacciones",
-    "parametros": ["fecha_inicio", "fecha_fin"],
-    "Area-group": ["Operaciones", "Administración", "Tecnología"],
-    "Level-group": [
-      "Contributor Level",
-      "Lead Level",
-      "Head Level",
-      "C Level",
-      "Admin",
-      "SuperAdmin"
-    ]
-  }
+   "ver_reporte_transacciones": {
+      "nombre": "ver_reporte_transacciones",
+      "descripcion": "Permite ver el reporte de transacciones.",
+      "metodo": "GET",
+      "url_dirigida": "/reportes/transacciones",
+      "parametros": ["fecha_inicio", "fecha_fin"],
+      "Area-group": ["Operaciones", "Administración", "Tecnología"],
+      "Level-group": ["Contributor Level", "Lead Level", "Head Level", "C Level", "Admin", "SuperAdmin"]
+   }
 }
 ```
 
 ### Validación de permisos
-
 - El sistema valida los permisos del usuario al construir el menú lateral y al acceder a cada página o acción.
 - Solo se muestran y habilitan los módulos, submódulos y métodos para los que el usuario tiene permisos, según sus grupos de Azure AD.
 
 ### Recomendaciones
-
 - Mantén la configuración de permisos y módulos actualizada y documentada.
 - Si se agregan nuevos módulos o métodos, actualiza ambos archivos JSON para reflejar los cambios.
 - Utiliza nombres descriptivos y consistentes para facilitar el mantenimiento.
 
 Esta configuración externa permite una administración flexible y segura de los accesos y la estructura funcional del sistema.
 
+
 ## 8. Dependencias
 
 ### Requisitos principales
-
 - Python >= 3.8
 - [NiceGUI](https://nicegui.io/)
 - uvicorn, gunicorn (servidores ASGI para producción)
@@ -324,19 +307,19 @@ Esta configuración externa permite una administración flexible y segura de los
 - azure-core, azure-identity (integración con Azure y autenticación)
 
 ### Recomendaciones de entorno
-
 - Mantén actualizado el archivo `requirements.txt` si agregas nuevas dependencias.
+
 
 ## 9. Logging
 
 El proyecto utiliza el módulo estándar `logging` de Python para registrar eventos, errores y advertencias relevantes durante la ejecución de la aplicación. El logging es fundamental para el diagnóstico, la auditoría y la mejora continua del sistema.
 
 ### Prácticas recomendadas
-
 - Utiliza diferentes niveles de logging (`debug`, `info`, `warning`, `error`, `critical`) según la importancia del evento.
 - Registra errores de autenticación, fallos en la consulta a Graph API, problemas de permisos y cualquier excepción relevante.
 - Centraliza los logs en archivos o servicios externos (por ejemplo, Azure Monitor, Application Insights) en entornos productivos.
 - No loguees información sensible como tokens o datos personales completos.
+
 
 ## 10. Escalabilidad de Módulos
 
@@ -345,84 +328,77 @@ El sistema está diseñado para escalar fácilmente agregando nuevos módulos fu
 ### Guía paso a paso para crear un nuevo módulo
 
 1. **Copiar la carpeta de ejemplo**:
-
-   - Duplicar la carpeta `modulos/ejemplo` y renombrarla (por ejemplo, `modulos/nuevo`).
-   - Dentro de la nueva carpeta, ajustar los nombres de archivos y clases según el nuevo módulo.
-   - Es indispensable mantener la estructura interna: `rutas.py` para registrar rutas y `paginas/` para las páginas del módulo, de manera que todo el proyecto pueda mantener la misma estructura.
+    - Duplicar la carpeta `modulos/ejemplo` y renombrarla (por ejemplo, `modulos/nuevo`).
+    - Dentro de la nueva carpeta, ajustar los nombres de archivos y clases según el nuevo módulo.
+    - Es indispensable mantener la estructura interna: `rutas.py` para registrar rutas y `paginas/` para las páginas del módulo, de manera que todo el proyecto pueda mantener la misma estructura.
 
 2. **Crear/editar las páginas del módulo**:
+    - Agregar las páginas en `modulos/nuevo/paginas/`.
+    - Cada página debe ser una función asíncrona decorada con `@ui.page` y con `@plantilla` para heredar el layout estándar y la validación de identidad. ESTE PASO ES FUNDAMENTAL.
+    - Ejemplo de página:
+       ```python
+       from nicegui import ui
+       from modulos.principal.plantilla import plantilla
 
-   - Agregar las páginas en `modulos/nuevo/paginas/`.
-   - Cada página debe ser una función asíncrona decorada con `@ui.page` y con `@plantilla` para heredar el layout estándar y la validación de identidad. ESTE PASO ES FUNDAMENTAL.
-   - Ejemplo de página:
-
-     ```python
-     from nicegui import ui
-     from modulos.principal.plantilla import plantilla
-
-     @plantilla
-     async def pagina_resumen():
-           ui.label('Resumen')
-     ```
+       @plantilla
+       async def pagina_resumen():
+             ui.label('Resumen')
+       ```
 
 3. **Registrar las rutas**:
+    - Editar o crear el archivo `modulos/ventas/rutas.py`.
+    - Importar las funciones/páginas que se quieran registrar como rutas.
+    - Ejemplo:
+       ```python
+       from modulos.ventas.paginas.resumen import pagina_resumen
+       # ...otras importaciones de páginas...
 
-   - Editar o crear el archivo `modulos/ventas/rutas.py`.
-   - Importar las funciones/páginas que se quieran registrar como rutas.
-   - Ejemplo:
-
-     ```python
-     from modulos.ventas.paginas.resumen import pagina_resumen
-     # ...otras importaciones de páginas...
-
-     # Página de inicio
-      @ui.page('/',)
-      async def resumen():
-          await pagina_resumen()
-     ```
+       # Página de inicio
+        @ui.page('/',)
+        async def resumen():
+            await pagina_resumen()
+       ```
 
 4. **Actualizar la configuración**:
-
-   - Agregar el nuevo módulo y sus submódulos en `config/modulos.json`.
-   - Definir los métodos y permisos en `config/metodos.json`.
-   - Ejemplo de entrada en `modulos.json`:
-     ```json
-     "nuevo": {
-        "nombre_mostrado": "Nuevo",
-        "descripcion": "Nuevo módulo.",
-        "ruta": "/nuevo",
-        "submodulos": [
-           {
-              "nombre": "resumen",
-              "ruta": "/nuevo/resumen",
-              "nombre_mostrado_front": "Resumen",
-              "descripcion": "Resumen.",
-              "metodos_contenidos": ["ver_resumen_nuevo"]
-           }
-        ]
-     }
-     ```
-   - Ejemplo de entrada en `metodos.json`:
-     ```json
-     "ver_resumen_nuevo": {
-        "nombre": "ver_resumen_nuevo",
-        "descripcion": "Permite ver el resumen.",
-        "metodo": "GET",
-        "url_dirigida": "/nuevo/resumen",
-        "parametros": [],
-        "Area-group": ["Operaciones", "Administración"],
-        "Level-group": ["C-Level", "Admin", "SuperAdmin"]
-     }
-     ```
+    - Agregar el nuevo módulo y sus submódulos en `config/modulos.json`.
+    - Definir los métodos y permisos en `config/metodos.json`.
+    - Ejemplo de entrada en `modulos.json`:
+       ```json
+       "nuevo": {
+          "nombre_mostrado": "Nuevo",
+          "descripcion": "Nuevo módulo.",
+          "ruta": "/nuevo",
+          "submodulos": [
+             {
+                "nombre": "resumen",
+                "ruta": "/nuevo/resumen",
+                "nombre_mostrado_front": "Resumen",
+                "descripcion": "Resumen.",
+                "metodos_contenidos": ["ver_resumen_nuevo"]
+             }
+          ]
+       }
+       ```
+    - Ejemplo de entrada en `metodos.json`:
+       ```json
+       "ver_resumen_nuevo": {
+          "nombre": "ver_resumen_nuevo",
+          "descripcion": "Permite ver el resumen.",
+          "metodo": "GET",
+          "url_dirigida": "/nuevo/resumen",
+          "parametros": [],
+          "Area-group": ["Operaciones", "Administración"],
+          "Level-group": ["C-Level", "Admin", "SuperAdmin"]
+       }
+       ```
 
 5. **Importar las rutas en main.py**:
-   - Importar el archivo de rutas del nuevo módulo en `main.py`:
-     ```python
-     import modulos.ventas.rutas
-     ```
+    - Importar el archivo de rutas del nuevo módulo en `main.py`:
+       ```python
+       import modulos.ventas.rutas
+       ```
 6. **Cargar las nuevas dependencias**
-
-   - Agregar las dependencias pertinentes en `requirements.txt`.
+    - Agregar las dependencias pertinentes en `requirements.txt`.
 
 7. **Reinicia la aplicación** para que los cambios tengan efecto.
 
@@ -437,32 +413,26 @@ El sistema está diseñado para escalar fácilmente agregando nuevos módulos fu
 
 Esta metodología permite que el sistema crezca de manera ordenada, facilitando la colaboración y el mantenimiento a largo plazo.
 
+
 ## 11. DevOps
 
 ### Levantar servidor desarrollo
-
 ```powershell
 python main.py
 
-uvicorn main:app_ng --host localhost --port 8000
+uvicorn main:app_ng --host 0.0.0.0 --port 8000
 ```
 
-**Nota:** Para desarrollo local con usuario Root, ver la sección [Modo de Desarrollo Local](#12-modo-de-desarrollo-local).
-
 ### Crear una aplicación en Azure Web Service
-
 Configura la aplicación según la infraestructura establecida.
 
 ### Configuración de redes
-
 Restringe el acceso únicamente a usuarios dentro de la VPN mediante Configuración > Redes.
 
 ### Añadir proveedor de autenticación
-
 Agrega el proveedor de autenticación deseado desde Configuración > Autenticación.
 
 ### Habilitar Identidad Administrada
-
 Activa la identidad administrada de la aplicación desde Configuración > Identidad.
 
 #### Cómo Asignar Permisos a una Identidad Administrada con PowerShell
@@ -474,7 +444,7 @@ El proceso consiste en otorgar los permisos directamente al Service Principal de
 Aquí te muestro el método más común usando PowerShell.
 
 1. **Conéctate a Azure AD**
-   Abre PowerShell y ejecuta los siguientes comandos para instalar los módulos necesarios (si no los tienes) y conectarte.
+Abre PowerShell y ejecuta los siguientes comandos para instalar los módulos necesarios (si no los tienes) y conectarte.
 
 ```powershell
 # Instalar el módulo si no lo tienes
@@ -485,7 +455,7 @@ Connect-MgGraph -Scopes "AppRoleAssignment.ReadWrite.All", "Application.Read.All
 ```
 
 2. **Busca tu Identidad Administrada**
-   Necesitas encontrar el Service Principal de tu Identidad Administrada. Puedes buscarlo por su nombre (el mismo nombre que el recurso de Azure que la usa).
+Necesitas encontrar el Service Principal de tu Identidad Administrada. Puedes buscarlo por su nombre (el mismo nombre que el recurso de Azure que la usa).
 
 ```powershell
 # Reemplaza "Nombre-De-Tu-Identidad-Administrada"
@@ -493,14 +463,14 @@ $managedIdentity = Get-MgServicePrincipal -Filter "displayName eq 'Nombre-De-Tu-
 ```
 
 3. **Busca la API a la que quieres dar permisos (Microsoft Graph)**
-   Casi siempre, la API que necesitas es Microsoft Graph.
+Casi siempre, la API que necesitas es Microsoft Graph.
 
 ```powershell
 $graphApi = Get-MgServicePrincipal -Filter "appId eq '00000003-0000-0000-c000-000000000000'"
 ```
 
 4. **Busca el Permiso Específico que Quieres Asignar**
-   Ahora, necesitas encontrar el permiso (llamado AppRole) que quieres otorgar. Por ejemplo, si quieres leer todos los perfiles de usuario, usarías User.Read.All.
+Ahora, necesitas encontrar el permiso (llamado AppRole) que quieres otorgar. Por ejemplo, si quieres leer todos los perfiles de usuario, usarías User.Read.All.
 
 ```powershell
 # Reemplaza "User.Read.All" con el permiso que necesites
@@ -508,7 +478,7 @@ $appRole = $graphApi.AppRoles | Where-Object { $_.Value -eq "User.Read.All" }
 ```
 
 5. **Asigna el Permiso**
-   Este es el paso final donde conectas tu Identidad Administrada con el permiso de la API.
+Este es el paso final donde conectas tu Identidad Administrada con el permiso de la API.
 
 ```powershell
 # Asignar el rol a la identidad administrada
@@ -516,69 +486,3 @@ New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $managedIdentity.Id 
 ```
 
 ¡Y listo! Después de ejecutar estos comandos, tu Identidad Administrada tendrá el permiso User.Read.All (o el que hayas elegido) para llamar a la API de Microsoft Graph. Aunque no lo veas reflejado en la sección de "Permisos" del portal de la misma forma que con un registro de aplicación, el permiso estará activo y funcional.
-
-## 12. Modo de Desarrollo Local
-
-Para facilitar el desarrollo local sin necesidad de autenticación con Azure AD, la aplicación incluye un modo de desarrollo que crea automáticamente un usuario Root con todos los permisos.
-
-### Configuración del Modo de Desarrollo
-
-1. **Crear archivo de configuración**:
-   Crea un archivo llamado `config.env` en la raíz del proyecto con el siguiente contenido:
-
-   ```env
-   # Configuración para modo desarrollo
-   # Cambiar a 'true' para activar el usuario Root con todos los permisos
-   mode_dev=true
-   ```
-
-2. **Instalar dependencias**:
-   ```bash
-   pip install python-dotenv
-   ```
-
-### Ejecutar en Modo de Desarrollo
-
-**Recomendado - Con Uvicorn:**
-
-```bash
-uvicorn main:app_ng --reload
-```
-
-**Alternativa - Con Python directo:**
-
-```bash
-python main.py
-```
-
-### Características del Usuario Root de Desarrollo
-
-Cuando `mode_dev=true`, la aplicación:
-
-- ✅ **Crea automáticamente** un usuario Root con ID `root-dev`
-- ✅ **Otorga todos los permisos** disponibles en `config/metodos.json`
-- ✅ **Acceso completo** a todos los módulos en `config/modulos.json`
-- ✅ **Omite Graph API** - No realiza llamadas a Microsoft Graph
-- ✅ **Muestra indicador visual** "🚀 MODO DESARROLLO ACTIVADO" en la interfaz
-- ✅ **Nombre de usuario**: "Usuario Root (Dev)"
-- ✅ **Email**: "root@dev.local"
-
-### Cambiar entre Modos
-
-**Para Modo de Desarrollo:**
-
-```env
-mode_dev=true
-```
-
-**Para Modo de Producción (Azure AD):**
-
-```env
-mode_dev=false
-```
-
-### Notas Importantes
-
-- ⚠️ **Solo para desarrollo**: Este modo está diseñado únicamente para desarrollo local
-- 🔒 **No usar en producción**: Nunca configurar `mode_dev=true` en entornos de producción
-- 🔄 **Reinicio necesario**: Cambiar `mode_dev` requiere reiniciar la aplicación
