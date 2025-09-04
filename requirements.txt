@@ -6,3 +6,4 @@ requests
 
 azure-core
 azure-identity
+python-dotenv
