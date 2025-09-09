@@ -14,10 +14,13 @@ import modulos.principal.rutas
 
 ## Módulo de reportes
 import modulos.reportes.rutas
+
+## Módulo de fraude
+import modulos.fraude.rutas
 #-----------------------------------------
 # ------------------------------------------------------------------------------
 
 
 # Configuración y despliege de la aplicación
 app_ng = App()
-ui.run_with(app_ng, title='Back Office', favicon='static/img/favicon.ico')
+ui.run(title='Back Office', favicon='static/img/favicon.ico')
