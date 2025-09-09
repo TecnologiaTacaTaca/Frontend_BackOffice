@@ -27,11 +27,12 @@ def constructor_colores():
         secondary='#252525',
         dark='#252525',
         dark_page="#252525",
-        verdeoscuro='#005F5A',
+        verdeoscuro='#002F2D',
         verdeclaro='#35B6B4',
         blanco='#FFFFFF',
-        grisoscuro="#252525",
-        rojo='#F44336'
+        grisoscuro="#949494",
+        rojo='#F44336',
+        footer='#F0F0F0'
     )
 
     # Devuelve el modo oscuro para poder usarlo en el pie de página
