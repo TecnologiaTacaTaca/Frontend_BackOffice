@@ -7,6 +7,7 @@ import Transacciones from "./modulos/reportes/paginas/Transacciones";
 import Movimientos from "./modulos/reportes/paginas/Movimientos";
 import Auditoria from "./modulos/fraude/Auditoria/Auditoria";
 import ListaNegra from "./modulos/fraude/ListaNegra/ListaNegra";
+import Comercios from "./modulos/comercios/Comercios";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // Agrega más imports para otras páginas
@@ -62,6 +63,14 @@ function App() {
           element={
             <Plantilla>
               <Movimientos />
+            </Plantilla>
+          }
+        />
+        <Route
+          path="/comercios"
+          element={
+            <Plantilla>
+              <Comercios />
             </Plantilla>
           }
         />

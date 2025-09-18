@@ -1,9 +1,22 @@
 // Replicación de modulos.json para React
 export const modulos = {
+  inicio: {
+    nombre_mostrado: "Inicio",
+    descripcion: "Página principal de inicio.",
+    ruta: "/",
+    icono: "HomeIcon",
+  },
+  comercios: {
+    nombre_mostrado: "Comercios",
+    descripcion: "Módulo para gestión de comercios.",
+    ruta: "/comercios",
+    icono: "StoreIcon",
+  },
   reportes: {
     nombre_mostrado: "Reportes",
     descripcion: "Módulo para gestionar reportes.",
     ruta: "/reportes",
+    icono: "FolderIcon",
     submodulos: [
       {
         nombre: "reporte_transacciones",
@@ -31,6 +44,7 @@ export const modulos = {
     nombre_mostrado: "Fraude",
     descripcion: "Módulo para gestión de fraude y seguridad.",
     ruta: "/fraude",
+    icono: "SecurityIcon",
     submodulos: [
       {
         nombre: "gestion_fraude",

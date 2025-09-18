@@ -53,10 +53,10 @@ const Plantilla = ({ children }) => {
         <Box
           sx={{
             ml: isCollapsed ? "64px" : "256px",
-            mt: "64px",
+            mt: "80px",
             mb: "64px",
             transition: "margin-left 0.3s ease",
-            minHeight: "calc(100vh - 128px)",
+            minHeight: "calc(100vh - 144px)",
           }}
         >
           {children}

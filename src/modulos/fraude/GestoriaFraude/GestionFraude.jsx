@@ -5,13 +5,10 @@ import {
   Checkbox,
   Button,
   FormControlLabel,
-  Divider,
 } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import ConstructionIcon from "@mui/icons-material/Construction";
-import EngineeringIcon from "@mui/icons-material/Engineering";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TableFraude from "./table/TableFraude";
@@ -19,7 +16,6 @@ import TableFraude from "./table/TableFraude";
 const GestionFraude = () => {
   const [fecha, setFecha] = useState(dayjs());
   const [limpiarVisados, setLimpiarVisados] = useState(false);
-  const [showTable, setShowTable] = useState(true);
   const [dataTable, setDataTable] = useState([]);
 
   useEffect(() => {
@@ -147,16 +143,14 @@ const GestionFraude = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box className="bg-white p-6 w-full ">
-        <Box className="flex items-end gap-6 mb-6 mt-6 pl-12">
-          <Box>
-            <DatePicker
-              value={fecha}
-              label="Fecha"
-              className="border border-gray-400 w-80 p-1.5 rounded-sm"
-              onChange={setFecha}
-              format="DD/MM/YYYY"
-            />
-          </Box>
+        <Box className="flex items-end justify-start gap-6 mb-6 mt-6">
+          <DatePicker
+            value={fecha}
+            label="Fecha"
+            className="border border-gray-400  rounded-sm"
+            onChange={setFecha}
+            format="DD/MM/YYYY"
+          />
           <FormControlLabel
             control={
               <Checkbox
@@ -175,40 +169,14 @@ const GestionFraude = () => {
               color: "white",
               "&:hover": { backgroundColor: "#2a908f" },
               marginBottom: "5px",
-              marginLeft: "12px",
+              marginLeft: "24px",
             }}
             onClick={handleVerInfoScore}
           >
             Ver Info del Score
           </Button>
         </Box>
-        <Divider className="my-6" />
-        {!showTable ? (
-          <Box className="flex flex-col items-center justify-center py-12">
-            <Box className="flex items-center gap-4 mb-4">
-              <ConstructionIcon
-                className="text-orange-500"
-                sx={{ fontSize: "2rem" }}
-              />
-              <Typography
-                variant="h6"
-                className="text-xl font-semibold text-gray-600"
-              >
-                Contenido en desarrollo
-              </Typography>
-              <EngineeringIcon
-                className="text-orange-500"
-                sx={{ fontSize: "2rem" }}
-              />
-            </Box>
-            <Typography className="text-gray-500 text-center">
-              Los filtros y funcionalidades de gestión de fraude estarán
-              disponibles próximamente.
-            </Typography>
-          </Box>
-        ) : (
-          <TableFraude dataTable={dataTable} />
-        )}
+        <TableFraude dataTable={dataTable} />
       </Box>
     </LocalizationProvider>
   );

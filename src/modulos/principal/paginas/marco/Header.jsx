@@ -39,17 +39,26 @@ const Header = ({ isCollapsed }) => {
   return (
     <AppBar
       position="fixed"
-      className="bg-[#005F5A] text-white"
-      sx={{ zIndex: 1200 }}
+      className="bg-[#005F5A] text-white "
+      sx={{
+        zIndex: 1200,
+        height: "80px",
+      }}
     >
-      <Toolbar className="bg-[#005F5A] font-bold text-xl flex justify-between items-center">
+      <Toolbar
+        className="bg-[#005F5A] font-bold text-xl flex justify-between items-center"
+        sx={{
+          minHeight: "80px",
+          height: "80px",
+        }}
+      >
         <div className="flex items-center">
           <Typography
             variant="h5"
             className="ml-4"
             sx={{
               position: "absolute",
-              marginLeft: isCollapsed ? "70px" : "262px",
+              marginLeft: isCollapsed ? "80px" : "270px",
               transition: "width 0.3s ease",
             }}
           >
@@ -58,7 +67,7 @@ const Header = ({ isCollapsed }) => {
         </div>
         <div className="flex items-center">
           <img
-            src="/static/img/Logo-color-TT.png"
+            src="/static/img/Logo-color-TT.svg"
             alt="Logo"
             className="h-8 w-12 mr-2"
           />
