@@ -1,0 +1,53 @@
+// Replicación de metodos.json para React
+export const metodos = {
+  ver_reporte_transacciones: {
+    nombre: "ver_reporte_transacciones",
+    descripcion: "Permite ver el reporte de transacciones.",
+    metodo: "GET",
+    url_dirigida: "/reportes/transacciones",
+    parametros: ["fecha_inicio", "fecha_fin"],
+    "Area-group": ["Operaciones", "Administración", "Tecnología"],
+    "Level-group": [
+      "Contribuitor Level",
+      "Lead Level",
+      "Head Level",
+      "C Level",
+      "Admin",
+      "SuperAdmin",
+    ],
+  },
+  descargar_reporte_transacciones: {
+    nombre: "descargar_reporte_transacciones",
+    descripcion: "Permite descargar el reporte de transacciones.",
+    metodo: "GET",
+    url_dirigida: "/reportes/transacciones/descargar",
+    parametros: ["fecha_inicio", "fecha_fin"],
+    "Area-group": ["Operaciones", "Administración", "Tecnología"],
+    "Level-group": [
+      "Contribuitor Level",
+      "Lead Level",
+      "Head Level",
+      "C Level",
+      "Admin",
+      "SuperAdmin",
+    ],
+  },
+  ver_reporte_movimientos: {
+    nombre: "ver_reporte_movimientos",
+    descripcion: "Permite ver el reporte de movimientos.",
+    metodo: "GET",
+    url_dirigida: "/reportes/movimientos",
+    parametros: ["fecha_inicio", "fecha_fin"],
+    "Area-group": ["Operaciones", "Administración", "Tecnología"],
+    "Level-group": ["Head Level", "C Level", "Admin", "SuperAdmin"],
+  },
+  descargar_reporte_movimientos: {
+    nombre: "descargar_reporte_movimientos",
+    descripcion: "Permite descargar el reporte de movimientos.",
+    metodo: "GET",
+    url_dirigida: "/reportes/movimientos/descargar",
+    parametros: ["fecha_inicio", "fecha_fin"],
+    "Area-group": ["Operaciones", "Administración", "Tecnología"],
+    "Level-group": ["Head Level", "C Level", "Admin", "SuperAdmin"],
+  },
+};

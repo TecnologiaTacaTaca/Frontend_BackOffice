@@ -1,8 +1,0 @@
-nicegui
-uvicorn
-gunicorn
-
-requests
-
-azure-core
-azure-identity
