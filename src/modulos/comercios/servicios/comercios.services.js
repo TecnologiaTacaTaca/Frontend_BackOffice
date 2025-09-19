@@ -1,16 +1,15 @@
 import axios from "axios";
-import mockComercios from "../../../mock/mockComercios.json";
 
 const getComercios = async () => {
   try {
-    const response = await axios.get(
-      `${process.env.BACKEND_APIHUB_COMERCIOS}/comercios`
-    );
-    const data = response?.data?.length > 0 ? response.data : [];
+    const response = await axios.get(`http://127.0.0.1:8001/comercios`);
+    // Manejar la nueva estructura de respuesta
+    const responseData = response?.data;
+    const data = responseData?.data || responseData || [];
     return data;
   } catch (error) {
     console.error("Error al obtener comercios:", error);
-    return mockComercios;
+    return error;
   }
 };
 
