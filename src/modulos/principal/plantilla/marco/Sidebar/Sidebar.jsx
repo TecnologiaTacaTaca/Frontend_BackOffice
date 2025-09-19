@@ -6,7 +6,6 @@ import {
   ListItemIcon,
   ListItemText,
   Collapse,
-  Divider,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
@@ -17,7 +16,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import StoreIcon from "@mui/icons-material/Store";
 import SecurityIcon from "@mui/icons-material/Security";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../../../usuario_sesion/UserContext";
+import { UserContext } from "../../../../../usuario_sesion/UserContext";
 
 const Sidebar = ({ isCollapsed, toggleCollapse }) => {
   const { user, isLoading } = React.useContext(UserContext);
@@ -86,13 +85,13 @@ const Sidebar = ({ isCollapsed, toggleCollapse }) => {
             alignItems: "center",
             justifyContent: isCollapsed ? "center" : "flex-start",
             marginBottom: "35px",
-            marginTop: "5px",
+            marginTop: "12px",
           }}
         >
           <ListItemIcon sx={{ minWidth: isCollapsed ? "auto" : 40 }}>
             <MenuIcon className="text-teal-300" />
           </ListItemIcon>
-          {!isCollapsed && <ListItemText primary="MENÚ" />}
+          {!isCollapsed && <ListItemText className="pt-[3px]" primary="MENÚ" />}
         </ListItem>
         {user?.modulos?.map((modulo) => (
           <React.Fragment key={modulo.nombre_mostrado}>

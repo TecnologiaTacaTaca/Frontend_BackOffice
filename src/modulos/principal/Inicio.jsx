@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { useMsal } from "@azure/msal-react";
-import { UserContext } from "../../../usuario_sesion/UserContext";
+import { UserContext } from "../../usuario_sesion/UserContext";
 
 const Inicio = () => {
   const { user, isLoading } = React.useContext(UserContext);

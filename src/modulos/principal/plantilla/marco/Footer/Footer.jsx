@@ -1,13 +1,21 @@
 import React from "react";
 import { Box, Typography, Switch } from "@mui/material";
 
-const Footer = ({ darkMode, toggleDarkMode }) => {
+const Footer = ({ darkMode, toggleDarkMode, isCollapsed }) => {
   return (
     <Box
       className="bg-[#F0F0F0] dark:#949494 p-2 flex justify-between items-center fixed bottom-0 w-full"
-      sx={{ zIndex: 1100 }}
+      sx={{
+        zIndex: 1200,
+      }}
     >
-      <Typography className="text-white bg-[#949494] px-3 py-1 rounded-full ml-2">
+      <Typography
+        className="text-white bg-[#949494] px-3 py-1 rounded-full ml-2"
+        sx={{
+          marginLeft: isCollapsed ? "80px" : "270px",
+          transition: "margin-left 0.3s ease",
+        }}
+      >
         Versión 1.0
       </Typography>
       <Box className="flex items-center gap-2">

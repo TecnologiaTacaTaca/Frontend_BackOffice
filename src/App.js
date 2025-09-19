@@ -1,8 +1,8 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Plantilla from "./modulos/principal/Plantilla";
+import Plantilla from "./modulos/principal/plantilla/Plantilla";
 import GestionFraude from "./modulos/fraude/GestoriaFraude/GestionFraude";
-import Inicio from "./modulos/principal/paginas/Inicio";
+import Inicio from "./modulos/principal/Inicio";
 import Transacciones from "./modulos/reportes/paginas/Transacciones";
 import Movimientos from "./modulos/reportes/paginas/Movimientos";
 import Auditoria from "./modulos/fraude/Auditoria/Auditoria";

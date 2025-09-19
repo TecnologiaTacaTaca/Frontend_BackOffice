@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useMsal } from "@azure/msal-react";
 import { useLocation } from "react-router-dom";
-import { UserContext } from "../../../../usuario_sesion/UserContext";
+import { UserContext } from "../../../../../usuario_sesion/UserContext";
 
 const Header = ({ isCollapsed }) => {
   const { user, isLoading } = React.useContext(UserContext);
@@ -58,8 +58,8 @@ const Header = ({ isCollapsed }) => {
             className="ml-4"
             sx={{
               position: "absolute",
-              marginLeft: isCollapsed ? "80px" : "270px",
-              transition: "width 0.3s ease",
+              left: isCollapsed ? "80px" : "270px",
+              transition: "left 0.3s ease",
             }}
           >
             {sectionTitle}

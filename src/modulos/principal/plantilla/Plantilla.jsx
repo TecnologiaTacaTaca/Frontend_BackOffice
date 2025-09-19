@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import Header from "./paginas/marco/Header";
-import Sidebar from "./paginas/marco/Sidebar";
-import Footer from "./paginas/marco/Footer";
-import { useMsal } from "@azure/msal-react";
+import Header from "./marco/Header/Header";
+import Sidebar from "./marco/Sidebar/Sidebar";
+import Footer from "./marco/Footer/Footer";
 import { Box } from "@mui/material";
-import { UserContext } from "../../usuario_sesion/UserContext";
+import { UserContext } from "../../../usuario_sesion/UserContext";
 
 const Plantilla = ({ children }) => {
   const { user } = React.useContext(UserContext);
-
-  // Eliminar simulación: user ahora viene del contexto
-
   const [darkMode, setDarkMode] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -37,14 +33,7 @@ const Plantilla = ({ children }) => {
       <Box
         sx={{ minHeight: "100vh", position: "relative", overflow: "hidden" }}
       >
-        <Header
-          user={user}
-          isCollapsed={isCollapsed}
-          sx={{
-            ml: isCollapsed ? "64px" : "256px",
-            transition: "margin-left 0.3s ease",
-          }}
-        />
+        <Header user={user} isCollapsed={isCollapsed} />
         <Sidebar
           user={user}
           isCollapsed={isCollapsed}
@@ -64,11 +53,7 @@ const Plantilla = ({ children }) => {
         <Footer
           darkMode={darkMode}
           toggleDarkMode={toggleDarkMode}
-          sx={{
-            width: isCollapsed ? "calc(100% - 64px)" : "calc(100% - 256px)",
-            ml: isCollapsed ? "64px" : "256px",
-            transition: "all 0.3s ease",
-          }}
+          isCollapsed={isCollapsed}
         />
       </Box>
     </ThemeProvider>
