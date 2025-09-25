@@ -11,12 +11,11 @@ import {
   Button,
   TablePagination,
 } from "@mui/material";
-
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TableComercios from "./tablaComercios/tablaComercios";
+import ComercioDialog from "./ComercioDialog/ComercioDialog";
 import { getComercios } from "./servicios/comercios.services";
 
 const Comercios = () => {
@@ -29,6 +28,8 @@ const Comercios = () => {
   });
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [showComerciosDialog, setShowComerciosDialog] = useState(false);
+  const [detalleComercio, setDetalleComercio] = useState({});
 
   useEffect(() => {
     getDataTable();
@@ -39,7 +40,7 @@ const Comercios = () => {
   }, [filtros, dataTableOriginal]);
 
   useEffect(() => {
-    setPage(0); // Resetear a la primera página cuando cambien los filtros
+    setPage(0);
   }, [filtros]);
 
   const getDataTable = async () => {
@@ -55,44 +56,31 @@ const Comercios = () => {
     if (filtros.cuit.trim() !== "") {
       datosFiltrados = datosFiltrados.filter(
         (comercio) =>
-          comercio.cuit &&
-          comercio.cuit.toString().includes(filtros.cuit.trim())
+          comercio.CUIT &&
+          comercio.CUIT.toString().includes(filtros.cuit.trim())
       );
     }
 
     // Filtro por Estado
     if (filtros.estado !== "") {
-      datosFiltrados = datosFiltrados.filter(
-        (comercio) =>
-          comercio.estado &&
-          comercio.estado.toLowerCase() === filtros.estado.toLowerCase()
-      );
+      datosFiltrados = datosFiltrados.filter((comercio) => {
+        const estado =
+          comercio.Billetera === "Activa" ? "Habilitado" : "Deshabilitado";
+        return estado.toLowerCase() === filtros.estado.toLowerCase();
+      });
     }
 
     // Filtro por Fecha Alta
     if (filtros.fechaAlta !== "") {
       datosFiltrados = datosFiltrados.filter((comercio) => {
-        if (!comercio.fecha_alta) return false;
+        if (!comercio.Cliente_Desde) return false;
 
         // Comparar directamente las fechas en formato YYYY-MM-DD
-        return comercio.fecha_alta === filtros.fechaAlta;
+        return comercio.Cliente_Desde === filtros.fechaAlta;
       });
     }
 
     setDataTable(datosFiltrados);
-  };
-
-  const toastify = (title, message) => {
-    toast.warning(
-      <Box className="flex flex-col w-full pl-4">
-        <Box className="flex items-center gap-2 w-full">
-          <Typography variant="h4">{title}</Typography>
-        </Box>
-        <Box className="flex items-center gap-2">
-          <Typography variant="h6">{message}</Typography>
-        </Box>
-      </Box>
-    );
   };
 
   const handleFiltroChange = (campo, valor) => {
@@ -187,6 +175,8 @@ const Comercios = () => {
         {dataTable.length > 0 ? (
           <>
             <TableComercios
+              setShowComerciosDialog={setShowComerciosDialog}
+              setDetalleComercio={setDetalleComercio}
               dataTable={dataTable.slice(
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage
@@ -216,6 +206,14 @@ const Comercios = () => {
           </Box>
         )}
       </Box>
+      <ComercioDialog
+        open={showComerciosDialog}
+        comercio={detalleComercio}
+        onClose={() => {
+          setShowComerciosDialog(false);
+          setDetalleComercio({}); // Limpiar los datos del comercio
+        }}
+      />
     </LocalizationProvider>
   );
 };
