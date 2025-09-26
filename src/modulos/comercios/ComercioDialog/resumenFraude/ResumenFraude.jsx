@@ -9,7 +9,7 @@ import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 const ResumenFraude = ({ comercio }) => {
   return (
     <Box
-      className="m-2 p-2 bg-white border-b-4"
+      className="m-2 p-2 bg-white border-b-4 h-full"
       sx={{ borderColor: colores.celeste }}
     >
       {/* Titulo */}

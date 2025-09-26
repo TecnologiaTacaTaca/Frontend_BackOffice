@@ -19,17 +19,21 @@ const ResumenTransacciones = ({ comercio }) => {
   };
 
   useEffect(() => {
-    calcularGananciaCantidad(
-      comercio.Transacciones_MontoTotal,
-      comercio.Transacciones_MontoMesAnterior
-    );
-    calcularGanancia(
-      comercio.Transacciones_MontoTotal,
-      comercio.Transacciones_MontoMesAnterior
-    );
+    if (comercio) {
+      calcularGananciaCantidad(
+        comercio.Transacciones_MontoTotal,
+        comercio.Transacciones_MontoMesAnterior
+      );
+      calcularGanancia(
+        comercio.Transacciones_MontoTotal,
+        comercio.Transacciones_MontoMesAnterior
+      );
+    }
   }, [comercio]);
 
   const calcularGanancia = (monto1, monto2) => {
+    if (!comercio) return;
+
     if (
       comercio.Transacciones_MontoTotal >
       comercio.Transacciones_MontoMesAnterior
@@ -46,6 +50,8 @@ const ResumenTransacciones = ({ comercio }) => {
   };
 
   const calcularGananciaCantidad = (monto1, monto2) => {
+    if (!comercio) return;
+
     if (
       comercio.Transacciones_CantidadTotal >=
       comercio.Transacciones_CantidadMesAnterior
@@ -58,7 +64,7 @@ const ResumenTransacciones = ({ comercio }) => {
 
   return (
     <Box
-      className="m-2 p-2 bg-white border-b-4"
+      className="m-2 p-2 bg-white border-b-4 h-full"
       sx={{ borderColor: colores.celeste }}
     >
       {/* Titulo */}

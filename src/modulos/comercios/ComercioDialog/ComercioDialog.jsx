@@ -23,8 +23,8 @@ const ComercioDialog = ({ comercio, onClose, open }) => {
   }, [comercio]);
 
   const handleClose = () => {
-    setComercioData(null); // Limpiar los datos del comercio
     onClose(); // Cerrar el diálogo
+    setComercioData(null); // Limpiar los datos del comercio
   };
 
   return (
@@ -57,7 +57,7 @@ const ComercioDialog = ({ comercio, onClose, open }) => {
             display: "flex",
             backgroundColor: "#f0f0f0",
             flexDirection: "column",
-            gap: 3,
+            gap: 1,
           }}
         >
           {/* Detalle de comercio */}
@@ -66,7 +66,6 @@ const ComercioDialog = ({ comercio, onClose, open }) => {
               display: "flex",
               width: "100%",
               flexDirection: "row",
-              gap: 2,
             }}
           >
             <Box
@@ -86,6 +85,7 @@ const ComercioDialog = ({ comercio, onClose, open }) => {
               <Box
                 sx={{
                   width: "100%",
+                  marginBottom: "1vh",
                 }}
               >
                 <ResumenTransacciones comercio={comercioData} />
@@ -99,39 +99,38 @@ const ComercioDialog = ({ comercio, onClose, open }) => {
               </Box>
             </Box>
           </Box>
-
-          {/* Resumen de transacciones, fraude y envios */}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              width: "100%",
-              gap: 2,
-            }}
-          >
-            <Box
-              sx={{
-                width: "50%",
-              }}
-            >
-              <EnviosComercio comercio={comercioData} />
-            </Box>
-            <Box
-              sx={{
-                width: "50%",
-              }}
-            >
-              <ResumenMovimiento comercio={comercioData} />
-            </Box>
-          </Box>
-
           {/* Posicion consolidada */}
+
           <Box
             sx={{
               width: "100%",
             }}
           >
             <PosicionConsolidadaComercio comercio={comercioData} />
+
+            {/* Resumen de transacciones, fraude y envios */}
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <Box
+                sx={{
+                  width: "50%",
+                }}
+              >
+                <EnviosComercio comercio={comercioData} />
+              </Box>
+              <Box
+                sx={{
+                  width: "50%",
+                }}
+              >
+                <ResumenMovimiento comercio={comercioData} />
+              </Box>
+            </Box>
           </Box>
         </Box>
       </DialogContent>

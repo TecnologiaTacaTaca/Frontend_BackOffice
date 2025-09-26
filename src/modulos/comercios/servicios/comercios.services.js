@@ -1,6 +1,7 @@
 import axios from "axios";
 
 // Mock de datos de comercios para desarrollo
+// TODO: Eliminar cuando funcione la API correctamente
 const mockComercios = [
   {
     CUIT: "20123456789",

@@ -7,10 +7,10 @@ import { colores } from "../../../../estilos/colores";
 const DetalleComercio = ({ comercio }) => {
   return (
     <Box
-      className="m-2 p-2 bg-white border-b-4"
+      className="m-2 p-2 bg-white border-b-4 h-full"
       sx={{ borderColor: colores.celeste }}
     >
-      <Box className="flex items-center justify-between m-2 mb-10">
+      <Box className="flex items-center justify-between m-2 mb-4">
         <Typography
           variant="h8"
           sx={{ color: colores.verdeclaro, fontWeight: "bold" }}
