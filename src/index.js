@@ -23,15 +23,33 @@ const msalConfig = {
 
 const pca = new PublicClientApplication(msalConfig);
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <MsalProvider instance={pca}>
-      <UserProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </UserProvider>
-    </MsalProvider>
-  </React.StrictMode>
-);
+// Función asíncrona para inicializar y renderizar
+async function initializeAndRender() {
+  try {
+    await pca.initialize(); // ¡Esto es lo que faltaba! Inicializa MSAL asíncronamente
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(
+      <React.StrictMode>
+        <MsalProvider instance={pca}>
+          <UserProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </UserProvider>
+        </MsalProvider>
+      </React.StrictMode>
+    );
+  } catch (error) {
+    console.error("Error inicializando MSAL:", error);
+    // Opcional: Muestra un mensaje de error en la UI
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(
+      <div>
+        Error al inicializar la autenticación. Por favor, refresca la página.
+      </div>
+    );
+  }
+}
+
+// Ejecuta la inicialización
+initializeAndRender();
