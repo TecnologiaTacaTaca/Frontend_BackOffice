@@ -7,6 +7,8 @@ import App from "./App";
 import "./index.css";
 import UserProvider from "./usuario_sesion/UserContext";
 import "./estilos/style.scss";
+import { InteractionStatus } from "@azure/msal-browser";
+import { useMsal } from "@azure/msal-react";
 
 // Configuración de MSAL (ajusta con tus valores reales de config.env)
 const msalConfig = {
@@ -36,6 +38,24 @@ async function initializeAndRender() {
     if (allAccounts.length > 0) {
       pca.setActiveAccount(allAccounts[0]);
     }
+
+    // Esperar a que MSAL esté completamente listo (inProgress none)
+    const msalReady = () =>
+      new Promise((resolve) => {
+        const checkReady = () => {
+          if (
+            pca.getConfiguration().system?.asyncPopups ||
+            pca.getActiveAccount()
+          ) {
+            // Simple check, or use event
+            resolve();
+          } else {
+            setTimeout(checkReady, 100);
+          }
+        };
+        checkReady();
+      });
+    await msalReady();
 
     const root = ReactDOM.createRoot(document.getElementById("root"));
     root.render(

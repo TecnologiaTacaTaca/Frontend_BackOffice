@@ -48,69 +48,91 @@ export const UserProvider = ({ children }) => {
       } else {
         if (accounts.length === 0 && inProgress === InteractionStatus.None) {
           console.log("Iniciando loginAzure..."); // Debug: Confirma si entra aquí
-          await loginAzure(instance);
-          console.log("loginAzure completado."); // Debug: Si llega aquí después del login
+          try {
+            await loginAzure(instance);
+            console.log("loginAzure completado."); // Debug: Si llega aquí después del login
+
+            // Setear cuenta activa después del login
+            const allAccounts = instance.getAllAccounts();
+            if (allAccounts.length > 0) {
+              instance.setActiveAccount(allAccounts[0]);
+              console.log("Cuenta activa seteada:", allAccounts[0]);
+            } else {
+              console.log("No hay cuentas después del login.");
+            }
+          } catch (loginError) {
+            console.error("Error en loginAzure:", loginError);
+          }
           return; // Después del login, useEffect se re-ejecutará
         } else {
           console.log(
             "No se inicia login: Cuentas existen o interacción en progreso."
           ); // Debug: Razón por no iniciar
         }
-        const token = await adquirirTokenGraph(instance, accounts, [
-          "User.Read",
-          "GroupMember.Read.All",
-        ]);
-        const graphData = await llamarGraphApi("/me", token);
+        // Token acquisition with try/catch
+        try {
+          const token = await adquirirTokenGraph(instance, accounts, [
+            "User.Read",
+            "GroupMember.Read.All",
+          ]);
+          const graphData = await llamarGraphApi("/me", token);
 
-        const idUsuario = graphData.id;
-        const email = graphData.mail?.toLowerCase() || "email@desconocido.com";
-        const grupos = await obtenerGruposUsuarioDesdeGraph(token, idUsuario);
-        const nombre = await obtenerNombreUsuario(token, idUsuario);
-        const foto = await obtenerFotoUsuario(token, idUsuario);
+          const idUsuario = graphData.id;
+          const email =
+            graphData.mail?.toLowerCase() || "email@desconocido.com";
+          const grupos = await obtenerGruposUsuarioDesdeGraph(token, idUsuario);
+          const nombre = await obtenerNombreUsuario(token, idUsuario);
+          const foto = await obtenerFotoUsuario(token, idUsuario);
 
-        const gruposArea = grupos
-          .filter((g) => g.description === "Area-group")
-          .map((g) => g.displayName);
-        const gruposLevel = grupos
-          .filter((g) => g.description === "Level-group")
-          .map((g) => g.displayName);
+          const gruposArea = grupos
+            .filter((g) => g.description === "Area-group")
+            .map((g) => g.displayName);
+          const gruposLevel = grupos
+            .filter((g) => g.description === "Level-group")
+            .map((g) => g.displayName);
 
-        const metodosList = Object.entries(metodos)
-          .filter(
-            ([_, value]) =>
-              gruposArea.some((area) => value["Area-group"].includes(area)) &&
-              gruposLevel.some((level) => value["Level-group"].includes(level))
-          )
-          .map(([key]) => key);
+          const metodosList = Object.entries(metodos)
+            .filter(
+              ([_, value]) =>
+                gruposArea.some((area) => value["Area-group"].includes(area)) &&
+                gruposLevel.some((level) =>
+                  value["Level-group"].includes(level)
+                )
+            )
+            .map(([key]) => key);
 
-        const modulosFiltered = Object.entries(modulos)
-          .map(([_, value]) => {
-            const submodulos = value.submodulos.filter((sub) =>
-              sub.metodos_contenidos.some((metodo) =>
-                metodosList.includes(metodo)
-              )
-            );
-            if (submodulos.length > 0) {
-              return {
-                nombre_mostrado: value.nombre_mostrado,
-                descripcion: value.descripcion,
-                ruta: value.ruta,
-                submodulos,
-              };
-            }
-            return null;
-          })
-          .filter(Boolean);
+          const modulosFiltered = Object.entries(modulos)
+            .map(([_, value]) => {
+              const submodulos = value.submodulos.filter((sub) =>
+                sub.metodos_contenidos.some((metodo) =>
+                  metodosList.includes(metodo)
+                )
+              );
+              if (submodulos.length > 0) {
+                return {
+                  nombre_mostrado: value.nombre_mostrado,
+                  descripcion: value.descripcion,
+                  ruta: value.ruta,
+                  submodulos,
+                };
+              }
+              return null;
+            })
+            .filter(Boolean);
 
-        setUser({
-          id_usuario: idUsuario,
-          email,
-          name: nombre,
-          grupos,
-          photo: foto ? `data:image/jpeg;base64,${foto}` : "",
-          metodos: metodosList,
-          modulos: modulosFiltered,
-        });
+          setUser({
+            id_usuario: idUsuario,
+            email,
+            name: nombre,
+            grupos,
+            photo: foto ? `data:image/jpeg;base64,${foto}` : "",
+            metodos: metodosList,
+            modulos: modulosFiltered,
+          });
+        } catch (tokenError) {
+          console.error("Error adquiriendo token:", tokenError);
+          // Opcional: Set isLoading(false) o maneja error en UI
+        }
       }
       setIsLoading(false);
     };
