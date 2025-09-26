@@ -11,7 +11,7 @@ import { loginAzure } from "../../../usuario_sesion/servicios/ServicioAutenticac
 
 const Plantilla = ({ children }) => {
   const { user, isLoading } = React.useContext(UserContext);
-  const { instance } = useMsal();
+  const { instance, inProgress } = useMsal();
   const [darkMode, setDarkMode] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -33,6 +33,16 @@ const Plantilla = ({ children }) => {
   // Función para login manual
   const handleManualLogin = async () => {
     console.log("Intentando login manual...");
+
+    if (inProgress !== InteractionStatus.None) {
+      console.log("Interacción en progreso, no se puede iniciar login manual.");
+      return;
+    }
+
+    // Limpiar cache antes del login manual
+    console.log("Limpiando cache de MSAL antes de login manual...");
+    instance.clearCache();
+
     try {
       await loginAzure(instance);
       console.log("Login manual completado.");

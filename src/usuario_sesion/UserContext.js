@@ -46,6 +46,10 @@ export const UserProvider = ({ children }) => {
           modulos: modulosList,
         });
       } else {
+        // Limpiar cache de MSAL para evitar interacciones atascadas
+        console.log("Limpiando cache de MSAL antes de login...");
+        instance.clearCache();
+
         if (accounts.length === 0 && inProgress === InteractionStatus.None) {
           console.log("Iniciando loginAzure..."); // Debug: Confirma si entra aquí
           try {
