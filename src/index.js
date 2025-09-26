@@ -42,33 +42,15 @@ async function initializeAndRender() {
       console.log("Cuenta activa seteada.");
     }
 
-    // Esperar a que MSAL esté listo, con timeout y logs
-    const msalReady = () =>
-      new Promise((resolve, reject) => {
-        let attempts = 0;
-        const maxAttempts = 50; // 5 segundos (100ms * 50)
-        const checkReady = () => {
-          console.log(`Chequeando MSAL ready (intento ${attempts + 1})...`); // Debug loop
-          if (
-            pca.getConfiguration().system?.asyncPopups ||
-            pca.getActiveAccount()
-          ) {
-            console.log("Condición cumplida, MSAL listo.");
-            resolve();
-          } else if (attempts >= maxAttempts) {
-            console.log("Timeout: MSAL no listo después de 5s.");
-            reject(new Error("Timeout esperando MSAL ready"));
-          } else {
-            attempts++;
-            setTimeout(checkReady, 100);
-          }
-        };
-        checkReady();
-      });
-
-    await msalReady();
-    console.log("MSAL listo para render.");
-
+    // Delay simple para dar tiempo a MSAL en lugar de loop
+    console.log("Esperando 500ms para MSAL ready...");
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    console.log("Delay completado, procediendo a render.");
+  } catch (error) {
+    console.error("Error en inicialización:", error);
+  } finally {
+    // Render siempre, con fallback si no hay instancia
+    console.log("Renderizando app siempre...");
     const root = ReactDOM.createRoot(document.getElementById("root"));
     root.render(
       <React.StrictMode>
@@ -82,15 +64,6 @@ async function initializeAndRender() {
       </React.StrictMode>
     );
     console.log("App renderizada.");
-  } catch (error) {
-    console.error("Error inicializando MSAL:", error);
-    const root = ReactDOM.createRoot(document.getElementById("root"));
-    root.render(
-      <div style={{ color: "red", textAlign: "center" }}>
-        Error al inicializar la autenticación: {error.message}. Por favor,
-        refresca o contacta soporte.
-      </div>
-    );
   }
 }
 
