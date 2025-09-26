@@ -4,11 +4,13 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Header from "./marco/Header/Header";
 import Sidebar from "./marco/Sidebar/Sidebar";
 import Footer from "./marco/Footer/Footer";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { UserContext } from "../../../usuario_sesion/UserContext";
+import { useMsal, loginAzure } from "@azure/msal-react";
 
 const Plantilla = ({ children }) => {
-  const { user } = React.useContext(UserContext);
+  const { user, isLoading } = React.useContext(UserContext);
+  const { instance } = useMsal();
   const [darkMode, setDarkMode] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -26,6 +28,17 @@ const Plantilla = ({ children }) => {
   const theme = createTheme({
     palette: { mode: darkMode ? "dark" : "light" },
   });
+
+  // Función para login manual
+  const handleManualLogin = async () => {
+    console.log("Intentando login manual...");
+    try {
+      await loginAzure(instance);
+      console.log("Login manual completado.");
+    } catch (error) {
+      console.error("Error en login manual:", error);
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -46,9 +59,18 @@ const Plantilla = ({ children }) => {
             mb: "64px",
             transition: "margin-left 0.3s ease",
             minHeight: "calc(100vh - 144px)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          {children}
+          {!user ? (
+            <Button variant="contained" onClick={handleManualLogin}>
+              Login Manual con Microsoft
+            </Button>
+          ) : (
+            children
+          )}
         </Box>
         <Footer
           darkMode={darkMode}
