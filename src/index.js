@@ -26,7 +26,11 @@ const pca = new PublicClientApplication(msalConfig);
 // Función asíncrona para inicializar y renderizar
 async function initializeAndRender() {
   try {
-    await pca.initialize(); // ¡Esto es lo que faltaba! Inicializa MSAL asíncronamente
+    await pca.initialize(); // Inicializa MSAL asíncronamente
+
+    // Manejar cualquier redirección pendiente de MSAL (importante para loginRedirect o popups)
+    await pca.handleRedirectPromise();
+
     const root = ReactDOM.createRoot(document.getElementById("root"));
     root.render(
       <React.StrictMode>
@@ -41,7 +45,6 @@ async function initializeAndRender() {
     );
   } catch (error) {
     console.error("Error inicializando MSAL:", error);
-    // Opcional: Muestra un mensaje de error en la UI
     const root = ReactDOM.createRoot(document.getElementById("root"));
     root.render(
       <div>
