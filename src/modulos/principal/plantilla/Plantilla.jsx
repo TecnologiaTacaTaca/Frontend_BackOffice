@@ -6,7 +6,7 @@ import Sidebar from "./marco/Sidebar/Sidebar";
 import Footer from "./marco/Footer/Footer";
 import { Box, Button } from "@mui/material";
 import { UserContext } from "../../../usuario_sesion/UserContext";
-import { useMsal, loginAzure } from "@azure/msal-react";
+import { loginAzure } from "../../../usuario_sesion/servicios/ServicioAutenticacionAzure";
 
 const Plantilla = ({ children }) => {
   const { user, isLoading } = React.useContext(UserContext);
