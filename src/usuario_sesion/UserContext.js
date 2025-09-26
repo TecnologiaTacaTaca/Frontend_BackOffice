@@ -10,11 +10,12 @@ import {
 import { loginAzure } from "./servicios/ServicioAutenticacionAzure";
 import { metodos } from "../config/metodos";
 import { modulos } from "../config/modulos";
+import { InteractionStatus } from "@azure/msal-browser";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const { instance, accounts } = useMsal();
+  const { instance, accounts, inProgress } = useMsal();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -41,7 +42,8 @@ export const UserProvider = ({ children }) => {
           modulos: modulosList,
         });
       } else {
-        if (accounts.length === 0) {
+        if (accounts.length === 0 && inProgress === InteractionStatus.None) {
+          // Chequeo agregado para evitar interacción en progreso
           await loginAzure(instance);
           return; // Después del login, useEffect se re-ejecutará
         }
