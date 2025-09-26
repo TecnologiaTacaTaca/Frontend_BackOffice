@@ -21,6 +21,10 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const initUser = async () => {
+      console.log("initUser llamado. Entorno:", process.env.NODE_ENV); // Debug: Ver entorno
+      console.log("Cuentas MSAL:", accounts.length, accounts); // Debug: Ver si hay cuentas
+      console.log("Estado de interacción:", inProgress); // Debug: Ver inProgress
+
       if (process.env.NODE_ENV === "development") {
         // Modo dev: Usuario root con todos los permisos
         const modulosList = Object.entries(modulos).map(([_, value]) => ({
@@ -43,9 +47,14 @@ export const UserProvider = ({ children }) => {
         });
       } else {
         if (accounts.length === 0 && inProgress === InteractionStatus.None) {
-          // Chequeo agregado para evitar interacción en progreso
+          console.log("Iniciando loginAzure..."); // Debug: Confirma si entra aquí
           await loginAzure(instance);
+          console.log("loginAzure completado."); // Debug: Si llega aquí después del login
           return; // Después del login, useEffect se re-ejecutará
+        } else {
+          console.log(
+            "No se inicia login: Cuentas existen o interacción en progreso."
+          ); // Debug: Razón por no iniciar
         }
         const token = await adquirirTokenGraph(instance, accounts, [
           "User.Read",
@@ -107,7 +116,7 @@ export const UserProvider = ({ children }) => {
     };
 
     initUser();
-  }, [instance, accounts]);
+  }, [instance, accounts, inProgress]); // Agrega inProgress a dependencias si no está
 
   return (
     <UserContext.Provider value={{ user, isLoading }}>

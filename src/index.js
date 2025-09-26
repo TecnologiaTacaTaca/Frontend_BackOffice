@@ -11,8 +11,8 @@ import "./estilos/style.scss";
 // Configuración de MSAL (ajusta con tus valores reales de config.env)
 const msalConfig = {
   auth: {
-    clientId: process.env.REACT_APP_CLIENT_ID,
-    authority: `https://login.microsoftonline.com/${process.env.REACT_APP_TENANT_ID}`,
+    clientId: "46d9fcd7-fd32-4d6d-99b9-353bffe6c976",
+    authority: `https://login.microsoftonline.com/326e43ac-c8b6-4d59-b0eb-314b79dd9c13`,
     redirectUri: window.location.origin,
   },
   cache: {
@@ -30,6 +30,12 @@ async function initializeAndRender() {
 
     // Manejar cualquier redirección pendiente de MSAL (importante para loginRedirect o popups)
     await pca.handleRedirectPromise();
+
+    // Establecer cuenta activa si hay cuentas disponibles después del redirect
+    const allAccounts = pca.getAllAccounts();
+    if (allAccounts.length > 0) {
+      pca.setActiveAccount(allAccounts[0]);
+    }
 
     const root = ReactDOM.createRoot(document.getElementById("root"));
     root.render(
