@@ -28,18 +28,21 @@ const pca = new PublicClientApplication(msalConfig);
 // Función asíncrona para inicializar y renderizar
 async function initializeAndRender() {
   try {
-    await pca.initialize(); // Inicializa MSAL asíncronamente
+    console.log("Iniciando inicialización de MSAL..."); // Debug
+    await pca.initialize();
+    console.log("MSAL inicializado.");
 
-    // Manejar cualquier redirección pendiente de MSAL (importante para loginRedirect o popups)
+    console.log("Manejando redirect promise...");
     await pca.handleRedirectPromise();
+    console.log("Redirect promise manejado.");
 
-    // Establecer cuenta activa si hay cuentas disponibles después del redirect
     const allAccounts = pca.getAllAccounts();
     if (allAccounts.length > 0) {
       pca.setActiveAccount(allAccounts[0]);
+      console.log("Cuenta activa seteada.");
     }
 
-    // Esperar a que MSAL esté completamente listo (inProgress none)
+    // Esperar a que MSAL esté listo
     const msalReady = () =>
       new Promise((resolve) => {
         const checkReady = () => {
@@ -47,7 +50,6 @@ async function initializeAndRender() {
             pca.getConfiguration().system?.asyncPopups ||
             pca.getActiveAccount()
           ) {
-            // Simple check, or use event
             resolve();
           } else {
             setTimeout(checkReady, 100);
@@ -56,6 +58,7 @@ async function initializeAndRender() {
         checkReady();
       });
     await msalReady();
+    console.log("MSAL listo para render.");
 
     const root = ReactDOM.createRoot(document.getElementById("root"));
     root.render(
@@ -69,6 +72,7 @@ async function initializeAndRender() {
         </MsalProvider>
       </React.StrictMode>
     );
+    console.log("App renderizada.");
   } catch (error) {
     console.error("Error inicializando MSAL:", error);
     const root = ReactDOM.createRoot(document.getElementById("root"));

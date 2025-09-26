@@ -4,7 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Header from "./marco/Header/Header";
 import Sidebar from "./marco/Sidebar/Sidebar";
 import Footer from "./marco/Footer/Footer";
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import { UserContext } from "../../../usuario_sesion/UserContext";
 import { loginAzure } from "../../../usuario_sesion/servicios/ServicioAutenticacionAzure";
 
@@ -64,7 +64,9 @@ const Plantilla = ({ children }) => {
             alignItems: "center",
           }}
         >
-          {!user ? (
+          {isLoading ? (
+            <CircularProgress />
+          ) : !user ? (
             <Button variant="contained" onClick={handleManualLogin}>
               Login Manual con Microsoft
             </Button>
